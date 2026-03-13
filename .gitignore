@@ -1,0 +1,14 @@
+# Dados pessoais do usuario — NUNCA commitar
+memory/context.md
+memory/profile.md
+memory/tasks/
+memory/topics/
+memory/learnings/session-log.md
+memory/learnings/improvement-notes.md
+
+# Manter templates e estrutura
+!memory/MEMORY.md
+!memory/tasks/.gitkeep
+!memory/tasks/done/.gitkeep
+!memory/topics/dumps/.gitkeep
+!memory/learnings/.gitkeep
