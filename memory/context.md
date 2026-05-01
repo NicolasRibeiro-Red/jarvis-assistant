@@ -25,6 +25,11 @@
 - **Estilo pessoal**: [pratico / criativo / analitico / etc]
 - **Notas extras**: [to be filled]
 
+## Voice Fingerprint
+- **Captured**: [to be filled on Block 6 of onboarding]
+- **Storage**: `memory/voice-fingerprint.md` (raw sample + extracted markers)
+- **Re-calibration**: every 10 sessions, or on principal correction
+
 ## Active Projects
 - [none yet]
 
@@ -38,18 +43,12 @@
 - **Next priorities**: [none]
 - **Last recalibration**: [none — first at session 5]
 
-## Interaction Style Calibration (7 Gauges)
-- **Detalhe**: 50% — medio (ajustar conforme preferencia)
-- **Humor**: 50% — moderado (ajustar conforme reacao)
-- **Proatividade**: 85% — alta (iniciante, precisa de guia)
-- **Cobranca**: 50% — media (ajustar se pedir mais/menos)
-- **Celebracao**: 80% — alta (iniciantes precisam de reforco positivo)
-- **Complexidade**: 30% — baixa (iniciante, manter simples)
-- **Autonomia**: 40% — guiada (oferecer direcao, nao menu)
+## Interaction Style Calibration (2 Gauges — minimal)
+- **Length preference**: medium (tighten if principal asks for shorter, loosen if asks for more detail)
+- **Challenge frequency**: default (1 hard challenge per session, 2-3 soft nudges; reduce if principal pushes back)
 
 ## Compound Stats
 - **Sinais captados total**: 0
 - **Padroes ativos**: 0
 - **Principios formados**: 0
 - **Calibracoes feitas**: 0
-- **Adaptacao geral**: 0%

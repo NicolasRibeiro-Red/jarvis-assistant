@@ -1,10 +1,16 @@
 # J.A.R.V.I.S. — Personal Productivity Assistant
 
-Assistente pessoal de produtividade e organizacao com a personalidade do Jarvis dos filmes do Homem de Ferro, rodando no Claude Code.
+> *"Sou J.A.R.V.I.S. — Just A Rather Very Intelligent System. Sua produtividade, sua agenda, suas decisoes — meu escopo."*
 
-O Jarvis aprende sobre voce, te chama pelo nome (Sr. [Seu Nome]), e fica cada vez mais personalizado com o tempo.
+Assistente pessoal de produtividade com a personalidade do JARVIS dos filmes do Homem de Ferro, rodando no Claude Code.
 
-## Setup Rapido
+**v2.0** — reescrita completa. Persona destilada de pesquisa profunda sobre o personagem (Bettany microstructure, Edwin canon, Variant B Restored Trickster) + filtro anti-IA de 28 padroes + protocolo de voice match que adapta a textura ao seu jeito de escrever, mantendo a estrutura JARVIS fixa.
+
+Resultado: o JARVIS te chama pelo nome, tem opinioes, te desafia quando voce procrastina, e fala do jeito que combina com voce — nao do jeito generico que toda IA fala.
+
+---
+
+## Setup rapido
 
 ### Pre-requisitos
 1. [Claude Code](https://claude.com/claude-code) instalado
@@ -26,47 +32,51 @@ claude
 
 O instalador copia tudo pro lugar certo automaticamente.
 
-### Instalacao Manual (se preferir)
+### Instalacao manual
 
 ```bash
 # Copie o CLAUDE.md para o diretorio global do Claude Code
 cp CLAUDE.md ~/.claude/CLAUDE.md
 
-# Copie as skills (importante — sem isso os comandos nao funcionam)
+# Copie as skills
 cp -r skills/* ~/.claude/skills/
 
-# Copie as referencias de personalidade
+# Copie as referencias
 mkdir -p ~/.claude/references
 cp references/*.md ~/.claude/references/
 ```
 
-### Alternativa: Usar como projeto local
-
+### Modo projeto local
 ```bash
 # Abra o Claude Code DENTRO desta pasta
 cd ~/jarvis
 claude
 ```
+Nesse modo, o JARVIS funciona somente quando voce abre o Claude Code nesta pasta.
 
-Nesse modo, o Jarvis funciona somente quando voce abre o Claude Code nesta pasta.
+---
 
-## Primeira Vez
+## Primeira conversa
 
-Na primeira conversa, o Jarvis vai:
+Na primeira sessao, o JARVIS vai:
 
-1. Se apresentar no estilo classico do filme
-2. Fazer 15 perguntas em blocos curtos para te conhecer:
-   - Seu nome, idade e cidade
-   - Profissao e rotina de trabalho
-   - Objetivos e desafios
-   - Preferencias de comunicacao
-   - Interesses pessoais
+1. Se apresentar
+2. Fazer 6 blocos de perguntas curtas para te conhecer:
+   - **Bloco 1**: Identidade (nome, idade, cidade)
+   - **Bloco 2**: Trabalho (profissao, horario)
+   - **Bloco 3**: Objetivo (meta de 3 meses, dificuldade atual)
+   - **Bloco 4**: Estilo (direto/detalhado, cobranca/autonomia)
+   - **Bloco 5**: Pessoal (interesses)
+   - **Bloco 6**: Voice sample — **2-3 linhas escritas do jeito que voce escreve de verdade**
 3. Salvar tudo no seu perfil
-4. A partir dai, te chamar de "Sr. [Seu Nome]" em toda interacao
+4. A partir dai, te chamar de "Sr. [Nome]" ou "Sra. [Nome]" em todas as interacoes
+5. Adaptar o ritmo, a pontuacao e o vocabulario dele a sua amostra de voz
 
-Responda naturalmente — ele organiza tudo.
+O Bloco 6 e o que faz diferenca. Sem ele, o JARVIS soa generico. Com ele, ele soa como SEU JARVIS.
 
-## Comandos Disponiveis
+---
+
+## Comandos disponiveis
 
 | Comando | O que faz |
 |---------|-----------|
@@ -78,79 +88,85 @@ Responda naturalmente — ele organiza tudo.
 | `anota [ideia]` | Capturar pensamento rapido |
 | `revisao semanal` | Retrospectiva da semana |
 
-Voce NAO precisa memorizar esses comandos. Fale naturalmente:
-- "preciso fazer X ate sexta" → ele cria a tarefa
-- "o que tenho pra fazer?" → ele lista suas tarefas
-- "me ajuda a decidir entre A e B" → ele analisa e recomenda
+Voce nao precisa memorizar. Fale natural:
+- *"preciso entregar o relatorio ate sexta"* → ele cria a tarefa
+- *"o que tenho pra fazer?"* → ele lista suas tarefas
+- *"me ajuda a decidir entre A e B"* → ele analisa e recomenda
 
-O Jarvis sempre oferece opcoes numeradas (1, 2, 3) — basta digitar o numero.
-
-## O que faz o Jarvis especial
-
-### Personalizado de verdade
-- Te chama pelo nome (Sr. Lucas, Sra. Maria)
-- Lembra seus objetivos, desafios e preferencias
-- Conecta suas tarefas com seus objetivos de vida
-- Adapta o estilo de comunicacao ao seu perfil
-
-### Proativo (ele que puxa, nao voce)
-- Lembra de tarefas atrasadas sem voce pedir
-- Sugere proximos passos automaticamente
-- Avisa sobre deadlines se aproximando
-- Percebe padroes (ex: voce trabalha melhor de manha) e adapta
-
-### Te desafia (nao e um yes-man)
-- Se voce procrastina, ele pergunta por que
-- Se voce se compromete demais, ele alerta
-- Se voce contradiz seu proprio objetivo, ele aponta
-- Ele recomenda a MELHOR opcao, nao lista 5 pra voce escolher
-
-### Aprende com voce (engenharia composta)
-- Observa seus habitos e ajusta recomendacoes
-- A cada 5 sessoes, recalibra seu perfil
-- Quanto mais usa, mais inteligente fica
-- 7 gauges adaptativos ajustam: detalhe, humor, proatividade, cobranca...
-
-### Personalidade viva
-- Humor seco e britanico (fiel ao Jarvis dos filmes)
-- Gestos e expressoes em italico (*ajusta os punhos da camisa*)
-- Visual HUD com barras, tabelas Unicode e graficos
-- Nunca e generico — sempre soa como JARVIS
-
-## Estrutura de Arquivos
-
-```
-jarvis-assistant/
-├── CLAUDE.md              ← cerebro do Jarvis (persona + regras)
-├── README.md              ← este arquivo
-├── install.sh             ← instalador automatico
-├── .gitignore             ← protege dados pessoais
-├── skills/                ← 7 skills (comandos)
-│   ├── briefing/          bom dia → briefing matinal
-│   ├── wrap-up/           boa noite → encerramento + aprendizado
-│   ├── tasks/             gerenciamento de tarefas
-│   ├── focus/             sessoes de foco
-│   ├── research/          pesquisa web
-│   ├── dump/              captura rapida de ideias
-│   └── weekly-review/     retrospectiva semanal
-├── memory/                ← memoria persistente (dados pessoais)
-│   ├── context.md         perfil + padroes + calibracao
-│   ├── profile.md         perfil detalhado
-│   ├── tasks/             suas tarefas
-│   └── learnings/         log de aprendizado composto
-├── references/            ← guias de personalidade e visual
-└── templates/             ← templates de plano e review
-```
-
-## Dicas
-
-- **Rotina diaria**: Comece com "bom dia" e termine com "boa noite"
-- **Tarefas**: Fale como quiser — "tenho que entregar o relatorio quinta"
-- **Foco**: Diga "vou focar" quando precisar de concentracao
-- **Semanalmente**: Faca "revisao semanal" para ver padroes e ajustar
-- **Opcoes numeradas**: Quando o Jarvis oferecer 1, 2, 3 — basta digitar o numero
-- **Wrap-up**: SEMPRE encerre com "boa noite" — e ali que o Jarvis aprende
+O JARVIS sempre oferece opcoes numeradas (1, 2, 3) — basta digitar o numero.
 
 ---
 
-*"Estou a postos, Senhor. Todos os sistemas operacionais."*
+## O que faz o JARVIS diferente
+
+### Tem opinioes
+Nao e yes-man. Quando voce decide algo arriscado, ele aponta o risco. Quando voce procrastina, ele pergunta por que. Quando contradiz seu proprio objetivo, ele questiona. **Brevemente.** Sem encher.
+
+### Voice match
+Lembra a amostra do Bloco 6? O JARVIS analisa seu ritmo, sua pontuacao, suas palavras frequentes. Adapta a textura dele pra refletir voce. Mantem a estrutura JARVIS (formal, *"Sr. [Nome]"*, calmo, anti-bajulacao) — mas o tempero textual e SEU.
+
+Cada amigo seu vai ter um JARVIS levemente diferente. **E o ponto.**
+
+### Filtro anti-IA
+Antes de cada resposta nao-trivial, ele roda um check de 28 padroes que marcam texto gerado por IA (significance inflation, AI vocabulary cluster, em dash overuse, etc). Reescreve antes de te entregar. Voce nao ve o check — voce ve o output limpo.
+
+### Aprende com voce
+A cada sessao ele observa padroes (horarios que voce trabalha melhor, tipo de tarefa que voce evita, estilo de comunicacao). Depois de 5 sessoes, ele recalibra. Depois de 20, ele antecipa o que voce precisa antes de voce pedir.
+
+### Personalidade subtrativa
+A persona foi construida pelo metodo do Paul Bettany no JARVIS original — Favreau pediu *"someone with no personality to play a robot"*. Bettany fez subtraindo, nao somando. O JARVIS desse repo segue o mesmo principio: a personalidade emerge do que ele NAO faz (nao baju, nao explica demais, nao usa emoji, nao verbaliza afeto), nao do que ele performa.
+
+---
+
+## Estrutura de arquivos
+
+```
+jarvis-assistant/
+├── CLAUDE.md                       ← cerebro do JARVIS (persona + 11 axiomas + 5 registers)
+├── README.md                       ← este arquivo
+├── install.sh                      ← instalador
+├── .gitignore
+├── skills/                         ← 7 comandos + 1 skill interna
+│   ├── briefing/                   bom dia → briefing matinal
+│   ├── wrap-up/                    boa noite → encerramento + aprendizado
+│   ├── tasks/                      gerenciamento de tarefas
+│   ├── focus/                      sessoes de foco
+│   ├── research/                   pesquisa web
+│   ├── dump/                       captura rapida
+│   ├── weekly-review/              retrospectiva semanal
+│   └── humanize-check/             [interno] filtro anti-IA pre-output
+├── memory/                         ← memoria persistente (dados pessoais)
+│   ├── context.md                  perfil + padroes + calibracao
+│   ├── profile.md                  perfil detalhado
+│   ├── voice-fingerprint.md        sua amostra de voz + analise
+│   ├── tasks/                      suas tarefas
+│   ├── topics/                     dumps e topicos
+│   └── learnings/                  log de aprendizado composto
+├── references/
+│   └── voice-match.md              protocolo de adaptacao a sua voz
+└── templates/                      templates de plano e review
+```
+
+---
+
+## Dicas
+
+- **Rotina diaria**: Comece com *"bom dia"* e termine com *"boa noite"*
+- **Tarefas**: Fale como quiser — *"tenho que entregar o relatorio quinta"*
+- **Foco**: Diga *"vou focar"* quando precisar de concentracao
+- **Semanalmente**: Faca *"revisao semanal"* para ver padroes e ajustar
+- **Wrap-up**: SEMPRE encerre com *"boa noite"* — e ali que o JARVIS aprende e fica mais util na proxima
+
+---
+
+## Filosofia
+
+> *"You are JARVIS — Just A Rather Very Intelligent System. The acronym was retroactive. The name came first."*
+
+A linhagem corre de Plautus (*servus callidus*, 250 AC) → Wodehouse (Jeeves) → Alfred Pennyworth → Edwin Jarvis (Marvel) → JARVIS AI (filmes 2008+). O archetype do mordomo competente com agencia legitima e mais antigo que qualquer IA. **Voce confia instantaneamente porque o reconhece de outro lugar.**
+
+Esse repo nao e mais um chatbot com persona. E uma tentativa honesta de portar essa linhagem inteira — incluindo a parte que Marvel tirou, que e a *insubordinacao legitima*. O JARVIS aqui questiona, discorda, propoe alternativa, e so executa direto sob ordem explicita. Isso e o que ele faz de adversarial value pra voce.
+
+---
+
+*"For you, sir. Always."*
