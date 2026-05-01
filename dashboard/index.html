@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>J.A.R.V.I.S. — Tarefas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ds-gray-100: #f2f2f2;
+  --ds-gray-200: #ebebeb;
+  --ds-gray-700: #8f8f8f;
+  --ds-gray-900: #4d4d4d;
+  --ds-gray-1000: #171717;
+  --ds-bg-100: #ffffff;
+  --ds-bg-200: #fafafa;
+  --ds-blue-700: #0070f5;
+  --ds-blue-800: #0061d2;
+  --ds-blue-200: #ade5ff;
+  --ds-blue-900: #00407a;
+  --ds-amber-900: #a35200;
+  --ds-amber-200: #fff5cc;
+  --ds-red-900: #cc2a2a;
+  --ds-red-200: #ffe5e5;
+  --ds-green-900: #297a3a;
+  --ds-green-200: #d6f4dd;
+  --ds-purple-900: #7820bb;
+  --ds-purple-200: #ecd5ff;
+  --ds-shadow-small: 0 2px 2px rgba(0,0,0,0.04);
+  --ds-shadow-card: 0 0 0 1px var(--ds-gray-200), 0 2px 2px rgba(0,0,0,0.04);
+  --ds-shadow-card-hover: 0 0 0 1px var(--ds-gray-1000), 0 4px 8px -4px rgba(0,0,0,0.08);
+  --ds-focus-ring: 0 0 0 2px var(--ds-bg-100), 0 0 0 4px var(--ds-blue-700);
+  --geist-radius: 6px;
+  --geist-radius-lg: 12px;
+  --geist-gap: 24px;
+  --geist-gap-half: 12px;
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--ds-gray-1000);
+  background: var(--ds-bg-100);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+body { min-height: 100vh; padding: var(--geist-gap); }
+.app { max-width: 1500px; margin: 0 auto; }
+
+header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--geist-gap);
+  padding-bottom: var(--geist-gap);
+  border-bottom: 1px solid var(--ds-gray-200);
+  margin-bottom: var(--geist-gap);
+}
+.title { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; }
+.title strong { font-weight: 600; }
+.subtitle { font-size: 0.875rem; color: var(--ds-gray-700); margin-top: 4px; }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--geist-gap-half);
+}
+.meta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--ds-gray-700); text-align: right; }
+.meta-stats { margin-top: 4px; color: var(--ds-gray-900); }
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0 14px;
+  height: 32px;
+  border-radius: var(--geist-radius);
+  border: 1px solid var(--ds-gray-1000);
+  background: var(--ds-gray-1000);
+  color: var(--ds-bg-100);
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.05s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn:hover { opacity: 0.85; }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: none; box-shadow: var(--ds-focus-ring); }
+
+.btn-secondary {
+  background: var(--ds-bg-100);
+  color: var(--ds-gray-1000);
+  border-color: var(--ds-gray-200);
+}
+.btn-secondary:hover { background: var(--ds-bg-200); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ds-gray-900);
+  border-color: transparent;
+  height: 28px;
+  padding: 0 8px;
+  font-size: 0.75rem;
+}
+.btn-ghost:hover { color: var(--ds-gray-1000); background: var(--ds-bg-200); }
+
+.kanban {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--geist-gap);
+}
+.column {
+  background: var(--ds-bg-200);
+  border: 1px solid var(--ds-gray-200);
+  border-radius: var(--geist-radius-lg);
+  padding: var(--geist-gap-half);
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.column.drag-over {
+  background: var(--ds-bg-100);
+  border-color: var(--ds-blue-700);
+  box-shadow: 0 0 0 1px var(--ds-blue-700);
+}
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px var(--geist-gap-half) 8px;
+  border-bottom: 1px solid var(--ds-gray-200);
+  margin-bottom: var(--geist-gap-half);
+}
+.column-header.col-fazendo::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 14px;
+  background: var(--ds-blue-700);
+  margin-right: 8px;
+  vertical-align: middle;
+  border-radius: 1px;
+}
+.column-name {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ds-gray-900);
+  display: flex;
+  align-items: center;
+}
+.column-count {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ds-gray-700);
+  background: var(--ds-bg-100);
+  border: 1px solid var(--ds-gray-200);
+  border-radius: var(--geist-radius);
+  padding: 2px 6px;
+}
+.column-body { display: flex; flex-direction: column; gap: var(--geist-gap-half); flex: 1; }
+
+.card {
+  background: var(--ds-bg-100);
+  border: 1px solid var(--ds-gray-200);
+  border-radius: var(--geist-radius);
+  padding: var(--geist-gap-half);
+  box-shadow: var(--ds-shadow-small);
+  cursor: grab;
+  transition: box-shadow 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+  user-select: none;
+}
+.card:hover { box-shadow: var(--ds-shadow-card-hover); transform: translateY(-1px); }
+.card:active { cursor: grabbing; }
+.card.dragging { opacity: 0.4; transform: rotate(1deg); }
+
+.card-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ds-gray-1000);
+  line-height: 1.4;
+  margin-bottom: 8px;
+  word-break: break-word;
+}
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: var(--ds-gray-700);
+}
+
+.badge {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.0125em;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 6px;
+  border-radius: var(--geist-radius);
+  display: inline-flex;
+  align-items: center;
+}
+.badge-priority-high { background: var(--ds-red-200); color: var(--ds-red-900); }
+.badge-priority-medium { background: var(--ds-amber-200); color: var(--ds-amber-900); }
+.badge-priority-low { background: var(--ds-gray-100); color: var(--ds-gray-900); }
+.badge-project { background: var(--ds-purple-200); color: var(--ds-purple-900); }
+.badge-overdue { background: var(--ds-red-900); color: var(--ds-bg-100); }
+.badge-today { background: var(--ds-blue-200); color: var(--ds-blue-900); }
+.due { font-family: var(--font-mono); }
+
+.card-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.card:hover .card-actions { opacity: 1; }
+.icon-btn {
+  background: transparent;
+  border: 1px solid var(--ds-gray-200);
+  color: var(--ds-gray-700);
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-family: var(--font-sans);
+  transition: all 0.15s ease;
+}
+.icon-btn:hover { color: var(--ds-gray-1000); background: var(--ds-bg-200); border-color: var(--ds-gray-1000); }
+.icon-btn.danger:hover { color: var(--ds-red-900); border-color: var(--ds-red-900); background: var(--ds-red-200); }
+
+.empty {
+  color: var(--ds-gray-700);
+  font-size: 0.8125rem;
+  padding: var(--geist-gap-half);
+  text-align: center;
+  border: 1px dashed var(--ds-gray-200);
+  border-radius: var(--geist-radius);
+  font-family: var(--font-mono);
+}
+
+.footer {
+  margin-top: var(--geist-gap);
+  padding-top: var(--geist-gap-half);
+  border-top: 1px solid var(--ds-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ds-gray-700);
+}
+.footer-stats { display: flex; gap: 24px; }
+.footer-stats span strong { color: var(--ds-gray-1000); font-weight: 500; }
+.toast {
+  position: fixed;
+  bottom: var(--geist-gap);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ds-gray-1000);
+  color: var(--ds-bg-100);
+  padding: 10px 16px;
+  border-radius: var(--geist-radius);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+  z-index: 100;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Modal */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+.modal-bg.show { display: flex; }
+.modal {
+  background: var(--ds-bg-100);
+  border-radius: var(--geist-radius-lg);
+  padding: var(--geist-gap);
+  width: 480px;
+  max-width: 90vw;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.16);
+  border: 1px solid var(--ds-gray-200);
+}
+.modal h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: var(--geist-gap-half);
+}
+.field { display: flex; flex-direction: column; gap: 4px; margin-bottom: var(--geist-gap-half); }
+.field label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ds-gray-900);
+  letter-spacing: 0.0125em;
+}
+.field input, .field select {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  padding: 8px 12px;
+  height: 36px;
+  border: 1px solid var(--ds-gray-200);
+  border-radius: var(--geist-radius);
+  color: var(--ds-gray-1000);
+  background: var(--ds-bg-100);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--ds-blue-700);
+  box-shadow: var(--ds-focus-ring);
+}
+.field input::placeholder { color: var(--ds-gray-700); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--geist-gap-half); }
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: var(--geist-gap);
+}
+
+@media (max-width: 1100px) {
+  .kanban { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .kanban { grid-template-columns: 1fr; }
+  header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .meta { text-align: left; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <div class="title">J.A.R.V.I.S. <strong>Tarefas</strong></div>
+      <div class="subtitle" id="subtitle">Carregando…</div>
+    </div>
+    <div class="header-right">
+      <div class="meta">
+        <div id="today-date">—</div>
+        <div class="meta-stats" id="meta-stats">— tarefas</div>
+      </div>
+      <button class="btn btn-secondary" id="btn-refresh" title="Recarregar">↻</button>
+      <button class="btn" id="btn-new">+ Nova</button>
+    </div>
+  </header>
+
+  <main class="kanban" id="kanban"></main>
+
+  <div class="footer">
+    <div class="footer-stats" id="footer-stats"></div>
+    <div>localhost:7321 · arraste para mover · clique no card para editar</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <h2 id="modal-title">Nova tarefa</h2>
+    <div class="field">
+      <label for="f-title">Titulo</label>
+      <input type="text" id="f-title" placeholder="O que precisa ser feito?" autocomplete="off">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="f-column">Coluna</label>
+        <select id="f-column">
+          <option value="a-fazer">A Fazer</option>
+          <option value="fazendo">Fazendo</option>
+          <option value="feitos">Feitos</option>
+          <option value="descartado">Descartado</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-priority">Prioridade</label>
+        <select id="f-priority">
+          <option value="high">Alta</option>
+          <option value="medium" selected>Media</option>
+          <option value="low">Baixa</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="f-project">Projeto</label>
+        <input type="text" id="f-project" placeholder="opcional" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="f-due">Prazo</label>
+        <input type="date" id="f-due">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="btn-cancel">Cancelar</button>
+      <button class="btn" id="btn-save">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const COLUMNS = [
+  { id: "a-fazer",     label: "A Fazer",     accent: false },
+  { id: "fazendo",     label: "Fazendo",     accent: true  },
+  { id: "feitos",      label: "Feitos",      accent: false },
+  { id: "descartado",  label: "Descartado",  accent: false }
+];
+const PRIORITY_LABELS = { high: "alta", medium: "media", low: "baixa" };
+const TODAY = new Date().toISOString().slice(0,10);
+
+let TASKS = [];
+let editingId = null;
+
+const $  = (sel) => document.querySelector(sel);
+const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function isOverdue(t) {
+  return t.due && t.due < TODAY && t.column !== "feitos" && t.column !== "descartado";
+}
+function isDueToday(t) {
+  return t.due === TODAY && t.column !== "feitos" && t.column !== "descartado";
+}
+function priorityRank(p) { return p === "high" ? 0 : p === "medium" ? 1 : 2; }
+function sortTasks(tasks) {
+  return [...tasks].sort((a,b) => {
+    const aOver = isOverdue(a), bOver = isOverdue(b);
+    if (aOver !== bOver) return aOver ? -1 : 1;
+    const pr = priorityRank(a.priority) - priorityRank(b.priority);
+    if (pr !== 0) return pr;
+    if (a.due && b.due) return a.due.localeCompare(b.due);
+    if (a.due) return -1;
+    if (b.due) return 1;
+    return 0;
+  });
+}
+function formatDue(s) {
+  if (!s) return "sem prazo";
+  const [y,m,d] = s.split("-");
+  return d + "/" + m;
+}
+function formatToday() {
+  const d = new Date();
+  const months = ["Janeiro","Fevereiro","Marco","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+  const days = ["domingo","segunda-feira","terca-feira","quarta-feira","quinta-feira","sexta-feira","sabado"];
+  return d.getDate().toString().padStart(2,"0") + " de " + months[d.getMonth()] + " de " + d.getFullYear() + " · " + days[d.getDay()];
+}
+
+async function api(method, path, body) {
+  const opts = { method, headers: { "Content-Type": "application/json" } };
+  if (body !== undefined) opts.body = JSON.stringify(body);
+  const r = await fetch(path, opts);
+  if (!r.ok) {
+    const e = await r.json().catch(() => ({error: r.statusText}));
+    throw new Error(e.error || ("HTTP " + r.status));
+  }
+  return r.json();
+}
+async function loadTasks() {
+  TASKS = await api("GET", "/api/tasks");
+  render();
+}
+async function patchTask(id, updates) {
+  await api("PATCH", "/api/tasks/" + id, updates);
+}
+async function createTask(data) {
+  await api("POST", "/api/tasks", data);
+}
+async function deleteTask(id) {
+  await api("DELETE", "/api/tasks/" + id);
+}
+
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+function renderCard(task) {
+  const overdue = isOverdue(task);
+  const today = isDueToday(task);
+  const isClosed = task.column === "feitos" || task.column === "descartado";
+  const dueLabel = task.column === "feitos"
+    ? (task.completed ? "concluida " + formatDue(task.completed) : "concluida")
+    : (task.column === "descartado" ? "descartada" : formatDue(task.due));
+  const dueBadge = overdue
+    ? '<span class="badge badge-overdue">vencida</span>'
+    : (today ? '<span class="badge badge-today">hoje</span>' : "");
+  const projectBadge = task.project
+    ? '<span class="badge badge-project">' + escapeHtml(task.project) + '</span>'
+    : "";
+  return `
+    <div class="card" draggable="true" data-id="${task.id}">
+      <div class="card-title">${escapeHtml(task.title)}</div>
+      <div class="card-meta">
+        <span class="badge badge-priority-${task.priority}">${PRIORITY_LABELS[task.priority] || task.priority}</span>
+        ${projectBadge}
+        ${dueBadge}
+        <span class="due">${dueLabel}</span>
+      </div>
+      <div class="card-actions">
+        ${task.column !== "feitos" ? '<button class="icon-btn" data-action="done" title="Marcar como feito">✓</button>' : ""}
+        ${task.column !== "descartado" ? '<button class="icon-btn" data-action="discard" title="Descartar">−</button>' : ""}
+        <button class="icon-btn" data-action="edit" title="Editar">✎</button>
+        <button class="icon-btn danger" data-action="delete" title="Excluir">×</button>
+      </div>
+    </div>
+  `;
+}
+
+function render() {
+  const grouped = {};
+  for (const c of COLUMNS) grouped[c.id] = [];
+  for (const t of TASKS) {
+    const col = grouped[t.column] ? t.column : "a-fazer";
+    grouped[col].push(t);
+  }
+
+  // Filter "feitos" to last 14 days
+  if (grouped.feitos) {
+    const cutoff = new Date(TODAY); cutoff.setDate(cutoff.getDate() - 14);
+    grouped.feitos = grouped.feitos.filter(t => {
+      if (!t.completed) return true;
+      return new Date(t.completed) >= cutoff;
+    });
+  }
+
+  const root = $("#kanban");
+  root.innerHTML = COLUMNS.map(col => {
+    const tasks = sortTasks(grouped[col.id]);
+    const cards = tasks.length
+      ? tasks.map(renderCard).join("")
+      : '<div class="empty">vazio</div>';
+    const headerClass = "column-header col-" + col.id;
+    return `
+      <div class="column" data-column="${col.id}">
+        <div class="${headerClass}">
+          <span class="column-name">${col.label}</span>
+          <span class="column-count">${tasks.length}</span>
+        </div>
+        <div class="column-body">${cards}</div>
+      </div>
+    `;
+  }).join("");
+
+  // Stats
+  const total = TASKS.length;
+  const overdue = TASKS.filter(isOverdue).length;
+  $("#meta-stats").textContent = total + " tarefa" + (total === 1 ? "" : "s") + (overdue > 0 ? " · " + overdue + " vencida" + (overdue === 1 ? "" : "s") : "");
+  const counts = {};
+  for (const c of COLUMNS) counts[c.id] = (grouped[c.id] || []).length;
+  $("#footer-stats").innerHTML = COLUMNS.map(c =>
+    '<span><strong>' + counts[c.id] + '</strong> ' + c.label.toLowerCase() + '</span>'
+  ).join("");
+
+  attachHandlers();
+}
+
+function attachHandlers() {
+  // Card drag
+  $$(".card").forEach(card => {
+    card.addEventListener("dragstart", (e) => {
+      card.classList.add("dragging");
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", card.dataset.id);
+    });
+    card.addEventListener("dragend", () => card.classList.remove("dragging"));
+
+    // Card actions
+    card.querySelectorAll(".icon-btn").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const action = btn.dataset.action;
+        const id = card.dataset.id;
+        if (action === "done") { await moveTask(id, "feitos"); }
+        else if (action === "discard") { await moveTask(id, "descartado"); }
+        else if (action === "edit") { openEditModal(id); }
+        else if (action === "delete") {
+          if (confirm("Excluir esta tarefa?")) {
+            await deleteTask(id);
+            toast("Excluida");
+            await loadTasks();
+          }
+        }
+      });
+    });
+
+    // Card click to edit (whole card)
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".card-actions")) return;
+      openEditModal(card.dataset.id);
+    });
+  });
+
+  // Column drop
+  $$(".column").forEach(col => {
+    col.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      col.classList.add("drag-over");
+    });
+    col.addEventListener("dragleave", (e) => {
+      if (!col.contains(e.relatedTarget)) col.classList.remove("drag-over");
+    });
+    col.addEventListener("drop", async (e) => {
+      e.preventDefault();
+      col.classList.remove("drag-over");
+      const id = e.dataTransfer.getData("text/plain");
+      const targetCol = col.dataset.column;
+      if (!id || !targetCol) return;
+      const task = TASKS.find(t => t.id === id);
+      if (!task || task.column === targetCol) return;
+      await moveTask(id, targetCol);
+    });
+  });
+}
+
+async function moveTask(id, column) {
+  try {
+    await patchTask(id, { column });
+    const colLabel = COLUMNS.find(c => c.id === column)?.label || column;
+    toast("Movida para " + colLabel);
+    await loadTasks();
+  } catch (e) {
+    toast("Erro: " + e.message);
+  }
+}
+
+// Modal
+function openEditModal(id) {
+  const t = TASKS.find(x => x.id === id);
+  if (!t) return;
+  editingId = id;
+  $("#modal-title").textContent = "Editar tarefa";
+  $("#f-title").value = t.title || "";
+  $("#f-column").value = t.column;
+  $("#f-priority").value = t.priority || "medium";
+  $("#f-project").value = t.project || "";
+  $("#f-due").value = t.due || "";
+  $("#modal-bg").classList.add("show");
+  setTimeout(() => $("#f-title").focus(), 0);
+}
+function openCreateModal() {
+  editingId = null;
+  $("#modal-title").textContent = "Nova tarefa";
+  $("#f-title").value = "";
+  $("#f-column").value = "a-fazer";
+  $("#f-priority").value = "medium";
+  $("#f-project").value = "";
+  $("#f-due").value = "";
+  $("#modal-bg").classList.add("show");
+  setTimeout(() => $("#f-title").focus(), 0);
+}
+function closeModal() {
+  $("#modal-bg").classList.remove("show");
+  editingId = null;
+}
+async function saveModal() {
+  const data = {
+    title: $("#f-title").value.trim(),
+    column: $("#f-column").value,
+    priority: $("#f-priority").value,
+    project: $("#f-project").value.trim(),
+    due: $("#f-due").value || null
+  };
+  if (!data.title) { toast("Titulo obrigatorio"); return; }
+  try {
+    if (editingId) {
+      await patchTask(editingId, data);
+      toast("Atualizada");
+    } else {
+      await createTask(data);
+      toast("Criada");
+    }
+    closeModal();
+    await loadTasks();
+  } catch (e) {
+    toast("Erro: " + e.message);
+  }
+}
+
+$("#btn-new").addEventListener("click", openCreateModal);
+$("#btn-cancel").addEventListener("click", closeModal);
+$("#btn-save").addEventListener("click", saveModal);
+$("#modal-bg").addEventListener("click", (e) => { if (e.target.id === "modal-bg") closeModal(); });
+$("#btn-refresh").addEventListener("click", loadTasks);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && $("#modal-bg").classList.contains("show")) closeModal();
+  if (e.key === "Enter" && $("#modal-bg").classList.contains("show") && e.target.tagName !== "TEXTAREA") {
+    e.preventDefault();
+    saveModal();
+  }
+  if ((e.metaKey || e.ctrlKey) && e.key === "n") { e.preventDefault(); openCreateModal(); }
+});
+
+// Init
+$("#today-date").textContent = formatToday();
+$("#subtitle").textContent = "Sr. Nicolas · arraste cards entre colunas para mover";
+loadTasks().catch(e => {
+  $("#kanban").innerHTML = '<div style="grid-column:1/-1;padding:48px;text-align:center;color:var(--ds-red-900);font-family:var(--font-mono);">Erro ao carregar tarefas: ' + escapeHtml(e.message) + '</div>';
+});
+</script>
+</body>
+</html>

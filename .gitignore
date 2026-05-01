@@ -11,8 +11,10 @@ memory/tasks/done/*.md
 memory/topics/*.md
 memory/topics/dumps/*.md
 
-# Dashboard gerado em runtime (contem dados pessoais)
-dashboard/
+# Dashboard runtime artifacts (server.py + index.html ARE versioned)
+dashboard/*.log
+dashboard/__pycache__/
+dashboard/*.pyc
 
 # Manter estrutura e index
 !memory/MEMORY.md
