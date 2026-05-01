@@ -7,8 +7,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
+<script>
+  // Apply theme before paint to avoid FOUC
+  (function() {
+    var saved = localStorage.getItem("jarvis-theme");
+    var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var theme = saved || (prefersDark ? "dark" : "light");
+    document.documentElement.dataset.theme = theme;
+  })();
+</script>
 <style>
-:root {
+:root, [data-theme="light"] {
   --ds-gray-100: #f2f2f2;
   --ds-gray-200: #ebebeb;
   --ds-gray-700: #8f8f8f;
@@ -32,6 +41,7 @@
   --ds-shadow-card: 0 0 0 1px var(--ds-gray-200), 0 2px 2px rgba(0,0,0,0.04);
   --ds-shadow-card-hover: 0 0 0 1px var(--ds-gray-1000), 0 4px 8px -4px rgba(0,0,0,0.08);
   --ds-focus-ring: 0 0 0 2px var(--ds-bg-100), 0 0 0 4px var(--ds-blue-700);
+  --ds-modal-overlay: rgba(0,0,0,0.4);
   --geist-radius: 6px;
   --geist-radius-lg: 12px;
   --geist-gap: 24px;
@@ -39,6 +49,37 @@
   --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
+
+[data-theme="dark"] {
+  --ds-gray-100: #1f1f1f;
+  --ds-gray-200: #2e2e2e;
+  --ds-gray-700: #7d7d7d;
+  --ds-gray-900: #a1a1a1;
+  --ds-gray-1000: #ededed;
+  --ds-bg-100: #000000;
+  --ds-bg-200: #0a0a0a;
+  --ds-blue-700: #0070f5;
+  --ds-blue-800: #3291ff;
+  --ds-blue-200: #002852;
+  --ds-blue-900: #99c8ff;
+  --ds-amber-900: #f5a524;
+  --ds-amber-200: #2e1c00;
+  --ds-red-900: #ff6166;
+  --ds-red-200: #3b0a0e;
+  --ds-green-900: #62c073;
+  --ds-green-200: #0a2912;
+  --ds-purple-900: #c47cff;
+  --ds-purple-200: #200d3a;
+  --ds-shadow-small: 0 2px 2px rgba(0,0,0,0.45);
+  --ds-shadow-card: 0 0 0 1px var(--ds-gray-200), 0 2px 2px rgba(0,0,0,0.45);
+  --ds-shadow-card-hover: 0 0 0 1px var(--ds-gray-1000), 0 4px 12px -4px rgba(0,0,0,0.5);
+  --ds-focus-ring: 0 0 0 2px var(--ds-bg-100), 0 0 0 4px var(--ds-blue-700);
+  --ds-modal-overlay: rgba(0,0,0,0.7);
+}
+
+html { color-scheme: light dark; }
+[data-theme="light"] html, [data-theme="light"] { color-scheme: light; }
+[data-theme="dark"] html, [data-theme="dark"] { color-scheme: dark; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
   font-family: var(--font-sans);
@@ -292,7 +333,7 @@ header {
 .modal-bg {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: var(--ds-modal-overlay);
   display: none;
   align-items: center;
   justify-content: center;
@@ -368,6 +409,7 @@ header {
         <div id="today-date">—</div>
         <div class="meta-stats" id="meta-stats">— tarefas</div>
       </div>
+      <button class="btn btn-secondary" id="btn-theme" title="Alternar tema" aria-label="Alternar tema">◐</button>
       <button class="btn btn-secondary" id="btn-refresh" title="Recarregar">↻</button>
       <button class="btn" id="btn-new">+ Nova</button>
     </div>
@@ -711,11 +753,28 @@ async function saveModal() {
   }
 }
 
+function toggleTheme() {
+  const cur = document.documentElement.dataset.theme || "light";
+  const next = cur === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem("jarvis-theme", next);
+  updateThemeButton();
+}
+function updateThemeButton() {
+  const btn = $("#btn-theme");
+  if (!btn) return;
+  const isDark = document.documentElement.dataset.theme === "dark";
+  btn.textContent = isDark ? "◑" : "◐";
+  btn.title = isDark ? "Modo claro" : "Modo escuro";
+}
+
 $("#btn-new").addEventListener("click", openCreateModal);
 $("#btn-cancel").addEventListener("click", closeModal);
 $("#btn-save").addEventListener("click", saveModal);
 $("#modal-bg").addEventListener("click", (e) => { if (e.target.id === "modal-bg") closeModal(); });
 $("#btn-refresh").addEventListener("click", loadTasks);
+$("#btn-theme").addEventListener("click", toggleTheme);
+updateThemeButton();
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && $("#modal-bg").classList.contains("show")) closeModal();
   if (e.key === "Enter" && $("#modal-bg").classList.contains("show") && e.target.tagName !== "TEXTAREA") {
