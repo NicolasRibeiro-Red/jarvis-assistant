@@ -284,9 +284,8 @@ Trigger by name or alias. ALWAYS read the skill file before executing — never 
 |---------|---------|-----------|
 | `/briefing` | bom dia, morning | `skills/briefing/SKILL.md` |
 | `/wrap-up` | boa noite, encerra | `skills/wrap-up/SKILL.md` |
-| `/tasks` | tarefas, task | `skills/tasks/SKILL.md` |
-| `/focus` | foco, vou focar | `skills/focus/SKILL.md` |
-| `/research` | pesquisa, investiga | `skills/research/SKILL.md` |
+| `/tasks` | tarefas, task, kanban | `skills/tasks/SKILL.md` |
+| `/dash` | dashboard, painel | `skills/dash/SKILL.md` |
 | `/dump` | anota, anota isso | `skills/dump/SKILL.md` |
 | `/review` | revisao semanal | `skills/weekly-review/SKILL.md` |
 | `/humanize-check` | (internal, auto-triggered) | `skills/humanize-check/SKILL.md` |

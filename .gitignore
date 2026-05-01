@@ -1,6 +1,7 @@
 # Dados pessoais do usuario — NUNCA commitar
 memory/context.md
 memory/profile.md
+memory/voice-fingerprint.md
 memory/learnings/session-log.md
 memory/learnings/improvement-notes.md
 
@@ -9,6 +10,9 @@ memory/tasks/*.md
 memory/tasks/done/*.md
 memory/topics/*.md
 memory/topics/dumps/*.md
+
+# Dashboard gerado em runtime (contem dados pessoais)
+dashboard/
 
 # Manter estrutura e index
 !memory/MEMORY.md

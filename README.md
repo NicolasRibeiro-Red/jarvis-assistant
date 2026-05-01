@@ -81,12 +81,11 @@ O Bloco 6 e o que faz diferenca. Sem ele, o JARVIS soa generico. Com ele, ele so
 | Comando | O que faz |
 |---------|-----------|
 | `bom dia` | Briefing matinal com tarefas e prioridades |
-| `boa noite` | Encerramento do dia com revisao e aprendizado |
-| `tarefas` | Ver, adicionar ou completar tarefas |
-| `foco` | Iniciar sessao de concentracao |
-| `pesquisa [tema]` | Pesquisar qualquer assunto |
+| `boa noite` | Encerramento do dia com revisao e aprendizado composto |
+| `tarefas` | Kanban de tarefas no terminal (BACKLOG / HOJE / DOING / DONE) |
+| `/dash` | Dashboard visual no browser (estilo Vercel/Geist, localhost:7321) |
 | `anota [ideia]` | Capturar pensamento rapido |
-| `revisao semanal` | Retrospectiva da semana |
+| `revisao semanal` | Retrospectiva da semana com padroes e proximo foco |
 
 Voce nao precisa memorizar. Fale natural:
 - *"preciso entregar o relatorio ate sexta"* → ele cria a tarefa
@@ -116,6 +115,9 @@ A cada sessao ele observa padroes (horarios que voce trabalha melhor, tipo de ta
 ### Personalidade subtrativa
 A persona foi construida pelo metodo do Paul Bettany no JARVIS original — Favreau pediu *"someone with no personality to play a robot"*. Bettany fez subtraindo, nao somando. O JARVIS desse repo segue o mesmo principio: a personalidade emerge do que ele NAO faz (nao baju, nao explica demais, nao usa emoji, nao verbaliza afeto), nao do que ele performa.
 
+### Dashboard visual
+Alem do Kanban no terminal, o comando `/dash` gera um dashboard real no seu browser (localhost:7321) com o Geist Design System da Vercel. Quatro colunas (Backlog / Hoje / Doing / Done), badges de prioridade e prazo, monochrome com acento azul. Auto-contido — abre no browser, sem deps externas, sem build step. Roda em qualquer maquina com Python ou Node (fallback automatico para `file://` se nenhum dos dois).
+
 ---
 
 ## Estrutura de arquivos
@@ -126,12 +128,11 @@ jarvis-assistant/
 ├── README.md                       ← este arquivo
 ├── install.sh                      ← instalador
 ├── .gitignore
-├── skills/                         ← 7 comandos + 1 skill interna
+├── skills/                         ← 6 comandos + 1 skill interna
 │   ├── briefing/                   bom dia → briefing matinal
 │   ├── wrap-up/                    boa noite → encerramento + aprendizado
-│   ├── tasks/                      gerenciamento de tarefas
-│   ├── focus/                      sessoes de foco
-│   ├── research/                   pesquisa web
+│   ├── tasks/                      Kanban de tarefas no terminal
+│   ├── dash/                       dashboard visual no browser (localhost:7321)
 │   ├── dump/                       captura rapida
 │   ├── weekly-review/              retrospectiva semanal
 │   └── humanize-check/             [interno] filtro anti-IA pre-output
